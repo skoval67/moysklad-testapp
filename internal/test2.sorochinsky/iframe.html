@@ -97,31 +97,35 @@
 <body>
 
 <center>
-<?php if ($errorMessage) { ?>
+
+{{ if .errorMessage }}
 	<div id="error_header">
 		<h3 style='margin: 0;'>
-			<?=$errorMessage?>
+			{{ .errorMessage }}
 		</h3>
 	</div>
-<?php } ?>
-<?php if ($successMessage) { ?>
+{{ end }}
+
+{{ if .successMessage }}
 	<div id="success_header">
 		<h3 style='margin: 0;'>
-			<?=$successMessage?>
+			{{ .successMessage }}
 		</h3>
 	</div>
-<?php } ?>
-<?php if ($loadedAllData == false) { ?>
+{{ end }}
+
+{{ if not .loadedAllData }}
 	<div id="header">
 		<form onsubmit="document.getElementById('load-all-data').innerHTML = 'Выполняется...';return true;">
-            <input type="hidden" name="accountId" value="<?=$accountId?>"/>
+            <input type="hidden" name="accountId" value="{{ .accountId }}"/>
 			<h3 style='margin: 0;'>
 				Обратите внимание: загружено только 1000 контрагентов, 1000 проектов и 1000 статей расходов!
 				<button class="button button" formaction="load_all_data.php" formmethod="post" type="submit" id='load-all-data'>Загрузить всё</button>
 			</h3>
 		</form>
 	</div>
-<?php } ?>
+{{ end }}
+
 <h2>Правила, по которым в Расходных ордерах и Исходящих платежах будут  устанавливаться Статьи расходов:</h2>
 </center>
 <table class="ui-table" style="width:100%;table-layout: fixed;">
@@ -140,11 +144,11 @@
     </tr>
     </thead>
     <tbody>
-		<?php foreach ($rules as $rule) { ?>
+		{{ range .rules }}
 			<form method="post" action="delete-rule.php">
-				<input type="hidden" name="accountId" value="<?=$accountId?>"/>
-				<input type="hidden" name="counterpartiesValues" value='<?php echo json_encode($counterpartiesValues, JSON_HEX_APOS); ?>'>
-				<input type="hidden" name="projectsValues" value='<?php echo json_encode($projectsValues, JSON_HEX_APOS); ?>'>
+				<input type="hidden" name="accountId" value="{{ .accountId }}"/>
+				<input type="hidden" name="counterpartiesValues" value='{{- /* json.Marshal(.counterpartiesValues, JSON_HEX_APOS) */ -}}'>
+	<!--			<input type="hidden" name="projectsValues" value='<?php echo json_encode($projectsValues, JSON_HEX_APOS); ?>'>
 				<input type="hidden" name="expenseitemsValues" value='<?php echo json_encode($expenseitemsValues, JSON_HEX_APOS); ?>'>
 				<input type="hidden" name="operand1Values" value='<?php echo json_encode($operand1Values); ?>'>
 				<input type="hidden" name="operand2Values" value='<?php echo json_encode($operand2Values); ?>'>
@@ -166,12 +170,12 @@
 						<input type="hidden" name="rule_number" value="<?=$rule['number']?>"/>
 						<button type="submit"><?=$rule['delete_button']?></button>
 					</td>
-				</tr>
-			</form>
-		<?php } ?>
+				</tr> -->
+			</form> 
+		{{ end }} 
     <tr>
         <td></td>
-        <td"></td>
+        <td></td>
         <td></td>
         <td></td>
         <td></td>
@@ -181,7 +185,7 @@
         <td></td>
         <td></td>
     </tr>
-    <tr>
+<!--    <tr>
         <form method="post" action="update-settings.php" onsubmit="document.getElementById('start-now-one').innerHTML = 'Выполняется...';return true;">
         <input type="hidden" name="accountId" value="<?=$accountId?>"/>
         <input type="hidden" name="flashStart" value="true"/>
@@ -244,9 +248,10 @@
             </select>
         </td>
         <td>----</td>
-    </tr>
+    </tr> -->
     </tbody>
 </table>
+<!--
 <center>
 <button class="button button--success" type="submit">Добавить правило в таблицу</button>
 <button class="button button--success" formaction="start-now.php" formmethod="post" type="submit" id='start-now-one'>Запустить, не добавляя в таблицу</button>
@@ -356,7 +361,7 @@
 <div id="footer">
     <h3 style='margin: 0;'>Вопросы, идеи, предложения присылайте в Telegram <a href='#' onclick="window.open('https://t.me/sloudel');">@sloudel</a> или на почту <a href='#' onclick="window.open('mailto:sloudel@yandex.ru');">sloudel@yandex.ru</a></h3>
 </div>
-
+-->
 <script>
   (function () {
   var buttons = document.querySelectorAll('.js-popup-open');
